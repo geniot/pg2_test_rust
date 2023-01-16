@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Hardware Test
+Comment=Test your PocketGo2v2
+Exec=pg2_test_rust.gcw
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=pg2_test_rust
+Categories=test;

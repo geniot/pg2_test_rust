@@ -40,7 +40,8 @@ impl Settings {
             Err(..) => MyConfig { user_data: HashMap::new() },
         };
 
-        let default_window_flags: u32 = (SDL_WindowFlags::SDL_WINDOW_SHOWN as u32 | SDL_WindowFlags::SDL_WINDOW_RESIZABLE as u32) as u32;
+        let mut default_window_flags: u32 = SDL_WindowFlags::SDL_WINDOW_SHOWN as u32;
+        default_window_flags |= SDL_WindowFlags::SDL_WINDOW_RESIZABLE as u32;
 
         conf.user_data.entry(XPos.to_string()).or_insert_with(|| 100.to_string());
         conf.user_data.entry(YPos.to_string()).or_insert_with(|| 100.to_string());
@@ -60,7 +61,7 @@ impl Settings {
         self.config.user_data.insert(setting_key.to_string(), val.to_string());
     }
 
-    pub fn save(& mut self, window: &Window) {
+    pub fn save(mut self, window: &Window) {
         if window.window_flags() as u32 & SDL_WindowFlags::SDL_WINDOW_MAXIMIZED as u32 <= 0 {
             self.set(XPos, window.position().0 as u32);
             self.set(YPos, window.position().1 as u32);

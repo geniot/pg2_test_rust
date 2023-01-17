@@ -20,7 +20,7 @@ mips:
 
 squash:
 	mksquashfs bin/${PROGRAM_NAME}.gcw \
- 	gcw0/${PROGRAM_NAME}.png \
+ 	src/res/${PROGRAM_NAME}.png \
  	gcw0/default.gcw0.desktop \
  	bin/${PROGRAM_NAME}.opk \
  	-all-root -no-xattrs -noappend -no-exports

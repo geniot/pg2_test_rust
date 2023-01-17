@@ -4,8 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-sdl2 = "0.35"
 abserde = "0.4.1"
 strum = "0.24"
 strum_macros = "0.24"
 serde = "1.0.150"
+
+[dependencies.sdl2]
+version = "0.35"
+default-features = false
+features = ["image"]

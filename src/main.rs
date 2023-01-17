@@ -20,8 +20,9 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     let video_subsystem = sdl_context.video()?;
 
     let window = video_subsystem
-        .window("PG2 Hardware Test", 320, 240)
+        .window("PG2 Hardware Test", settings.get(SettingKey::Width) as u32, settings.get(SettingKey::Height) as u32)
         .position(settings.get(SettingKey::XPos), settings.get(SettingKey::YPos))
+        .resizable()
         .build()
         .map_err(|e| e.to_string())?;
 
@@ -50,8 +51,10 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
         // The rest of the game loop goes here...
     }
 
-    settings.set(SettingKey::XPos,canvas.window().position().0);
-    settings.set(SettingKey::YPos,canvas.window().position().1);
+    settings.set(SettingKey::XPos, canvas.window().position().0);
+    settings.set(SettingKey::YPos, canvas.window().position().1);
+    settings.set(SettingKey::Width, canvas.window().size().0 as i32);
+    settings.set(SettingKey::Height, canvas.window().size().1 as i32);
 
     settings.save();
 

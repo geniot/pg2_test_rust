@@ -10,8 +10,8 @@ impl Emerald {
     }
 
     pub fn render(&self, rng: &mut ThreadRng, texture: &Texture, canvas: &mut WindowCanvas) {
-        let rect = Rect::new(rng.gen_range(0..300),
-                             rng.gen_range(0..220),
+        let rect = Rect::new(rng.gen_range(20..300),
+                             rng.gen_range(20..220),
                              20, 20);
         canvas.copy(texture, None, rect).unwrap();
     }

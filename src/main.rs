@@ -87,7 +87,7 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
 
         canvas.set_draw_color(Color::RGB(100, 0, 100));
-        canvas.clear();
+        // canvas.clear();
         fps_counter.render(timer_subsystem.ticks(), &mut font, &mut canvas);
         for i in 0..em_size {
             em_vec.get(i).unwrap().render(&mut rng, em_texture, &mut canvas);

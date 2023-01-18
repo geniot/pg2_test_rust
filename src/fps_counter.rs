@@ -48,6 +48,7 @@ impl FpsCounter {
             .create_texture_from_surface(&text_surface)
             .map_err(|e| e.to_string()).unwrap();
         let rect = Rect::new(0, 0, text_surface.width(), text_surface.height());
+        canvas.fill_rect(rect).unwrap();
         canvas.copy(&text_texture, None, rect).unwrap();
     }
 }

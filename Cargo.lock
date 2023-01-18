@@ -87,6 +87,7 @@ name = "pg2_test_rust"
 version = "0.1.0"
 dependencies = [
  "abserde",
+ "rand",
  "sdl2",
  "serde",
  "strum",

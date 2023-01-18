@@ -2,6 +2,7 @@
 
 mod settings;
 mod fps_counter;
+mod emerald;
 
 extern crate sdl2;
 #[macro_use]
@@ -13,6 +14,7 @@ use sdl2::pixels::Color;
 // use sdl2::image::{InitFlag};
 use settings::{Settings, SettingKey};
 use fps_counter::{FpsCounter};
+use crate::emerald::Emerald;
 
 
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -35,7 +37,20 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut font = ttf_context.load_font_from_rwops(font_rw_ops, 18)?;
     // font.set_style(sdl2::ttf::FontStyle::BOLD);
 
+    let em_bytes = include_bytes!("res/emerald.png");
+    let em_rw_ops = sdl2::rwops::RWops::from_bytes(em_bytes).unwrap();
+    let surface = sdl2::image::ImageRWops::load_png(&em_rw_ops).unwrap();
+
+
     let mut fps_counter = FpsCounter::new(timer_subsystem.ticks());
+
+    let mut rng = rand::thread_rng();
+
+    let em_size = 200;
+    let mut em_vec: Vec<Emerald> = Vec::with_capacity(em_size);
+    for _ in 0..em_size {
+        em_vec.push(Emerald::new());
+    }
 
 
     let mut window = video_subsystem
@@ -50,6 +65,12 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     window.set_icon(texture);
 
     let mut canvas = window.into_canvas().present_vsync().build().map_err(|e| e.to_string())?;
+
+    let texture_creator = canvas.texture_creator();
+    let em_texture = &texture_creator
+        .create_texture_from_surface(&surface)
+        .map_err(|e| e.to_string()).unwrap();
+
 
     let mut event_pump = sdl_context.event_pump()?;
 
@@ -68,6 +89,9 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
         canvas.set_draw_color(Color::RGB(100, 0, 100));
         canvas.clear();
         fps_counter.render(timer_subsystem.ticks(), &mut font, &mut canvas);
+        for i in 0..em_size {
+            em_vec.get(i).unwrap().render(&mut rng, em_texture, &mut canvas);
+        }
         canvas.present();
     }
 

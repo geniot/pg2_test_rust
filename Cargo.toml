@@ -4,8 +4,17 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.66"
+bitflags = "1.2.1"
+thiserror = "1.0.37"
 abserde = "0.4.1"
 strum = "0.24"
 strum_macros = "0.24"
 serde = "1.0.152"
-pix-engine = { path = "../pix-engine" }
+rand = "0.8.5"
+log = "0.4.17"
+
+[dependencies.sdl2]
+version = "0.35"
+default-features = false
+features = ["image","ttf"]

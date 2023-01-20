@@ -1,9 +1,16 @@
 #![windows_subsystem = "windows"]
 
 mod settings;
+mod engine;
+mod error;
+mod state;
+mod event;
 
-use pix_engine::prelude::*;
+use crate::engine::{Engine, PixEngine};
+use crate::error::PixResult;
+use crate::event::{Key, KeyEvent};
 use crate::settings::{SettingKey, Settings};
+use crate::state::PixState;
 
 struct Pg2Test {
     settings: Settings,
@@ -17,7 +24,7 @@ impl Pg2Test {
 
 impl PixEngine for Pg2Test {
     fn on_start(&mut self, s: &mut PixState) -> PixResult<()> {
-        s.show_window().unwrap();
+        s.canvas.window_mut().show();
         Ok(())
     }
 
@@ -32,7 +39,7 @@ impl PixEngine for Pg2Test {
 
     fn on_key_pressed(&mut self, s: &mut PixState, event: KeyEvent) -> PixResult<bool> {
         match event.key {
-            Key::Escape | Key::Home => s.quit(),
+            Key::Escape | Key::Home => s.quit = true,
             _ => (),
         }
         Ok(false)
@@ -41,17 +48,6 @@ impl PixEngine for Pg2Test {
 
 fn main() -> PixResult<()> {
     let mut app = Pg2Test::new();
-    let mut engine = Engine::builder()
-        .dimensions(app.settings.get(SettingKey::Width).unwrap().parse().unwrap(),
-                    app.settings.get(SettingKey::Height).unwrap().parse().unwrap())
-        .position(app.settings.get(SettingKey::XPos).unwrap().parse().unwrap(),
-                  app.settings.get(SettingKey::YPos).unwrap().parse().unwrap())
-        .vsync_enabled()
-        .resizable()
-        .title("PG2 Hardware Test")
-        .show_frame_rate()
-        .hidden()
-        .build()?;
-
+    let mut engine = Engine::builder().build()?;
     engine.run(&mut app)
 }

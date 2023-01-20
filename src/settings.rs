@@ -1,12 +1,13 @@
 extern crate strum;
 
 use std::collections::HashMap;
+use std::ops::Deref;
 use abserde::*;
 use serde::{Serialize, Deserialize};
 use std::string::ToString;
-use pix_engine::prelude::PixState;
 use SettingKey::*;
 use strum_macros::Display;
+use crate::state::PixState;
 
 pub struct Settings {
     my_abserde: Abserde,
@@ -57,10 +58,9 @@ impl Settings {
     }
 
     pub fn save(&mut self, state: &mut PixState) {
-        self.set(Width, state.window_width().unwrap().to_string());
-        self.set(Height, state.window_height().unwrap().to_string());
-        self.set(XPos, state.window_position_x().unwrap().to_string());
-        self.set(YPos, state.window_position_y().unwrap().to_string());
+        let (width, height) = state.canvas.window().size();
+        self.set(Width, width.to_string());
+        self.set(Height, height.to_string());
 
         self.config.save_config(&self.my_abserde).unwrap();
     }

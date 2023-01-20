@@ -21,14 +21,6 @@ impl PixEngine for Pg2Test {
         Ok(())
     }
 
-    fn on_key_pressed(&mut self, s: &mut PixState, event: KeyEvent) -> PixResult<bool> {
-        match event.key {
-            Key::Escape | Key::Home => s.quit(),
-            _ => (),
-        }
-        Ok(false)
-    }
-
     fn on_update(&mut self, s: &mut PixState) -> PixResult<()> {
         Ok(())
     }
@@ -36,6 +28,14 @@ impl PixEngine for Pg2Test {
     fn on_stop(&mut self, s: &mut PixState) -> PixResult<()> {
         self.settings.save(s);
         Ok(())
+    }
+
+    fn on_key_pressed(&mut self, s: &mut PixState, event: KeyEvent) -> PixResult<bool> {
+        match event.key {
+            Key::Escape | Key::Home => s.quit(),
+            _ => (),
+        }
+        Ok(false)
     }
 }
 

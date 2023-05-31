@@ -3,9 +3,10 @@ PROGRAM_NAME := pg2_test_rust
 all: clean build
 
 clean:
-		rm -f bin/*
-		# rm -f target/mipsel-unknown-linux-gnu/release/${PROGRAM_NAME}
-		# cargo clean
+	mkdir -p bin
+	rm -f bin/*
+	# rm -f target/mipsel-unknown-linux-gnu/release/${PROGRAM_NAME}
+	# cargo clean
 
 build:
 	cargo build --release --package ${PROGRAM_NAME} --bin ${PROGRAM_NAME}

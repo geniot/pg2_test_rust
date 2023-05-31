@@ -1,0 +1,16 @@
+[package]
+name = "pg2_test_rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+abserde = "0.4.1"
+strum = "0.24"
+strum_macros = "0.24"
+serde = "1.0.152"
+rand = "0.8.5"
+
+[dependencies.sdl2]
+version = "0.35"
+default-features = false
+features = ["image","ttf"]

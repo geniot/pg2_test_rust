@@ -1,12 +1,13 @@
 extern crate strum;
 
 use std::collections::HashMap;
+use std::ops::Deref;
 use abserde::*;
 use serde::{Serialize, Deserialize};
 use std::string::ToString;
-use sdl2::sys::SDL_WindowFlags;
-use sdl2::video::Window;
 use SettingKey::*;
+use strum_macros::Display;
+use crate::state::PixState;
 
 pub struct Settings {
     my_abserde: Abserde,
@@ -40,35 +41,26 @@ impl Settings {
             Err(..) => MyConfig { user_data: HashMap::new() },
         };
 
-        let mut default_window_flags: u32 = SDL_WindowFlags::SDL_WINDOW_SHOWN as u32;
-        default_window_flags |= SDL_WindowFlags::SDL_WINDOW_RESIZABLE as u32;
-
         conf.user_data.entry(XPos.to_string()).or_insert_with(|| 100.to_string());
         conf.user_data.entry(YPos.to_string()).or_insert_with(|| 100.to_string());
         conf.user_data.entry(Width.to_string()).or_insert_with(|| 320.to_string());
         conf.user_data.entry(Height.to_string()).or_insert_with(|| 240.to_string());
-        conf.user_data.entry(Flags.to_string()).or_insert_with(|| default_window_flags.to_string());
 
         Settings { my_abserde, config: conf }
     }
 
-    pub fn get(&self, setting_key: SettingKey) -> u32 {
-        let val_str: Option<&String> = self.config.user_data.get(&*setting_key.to_string());
-        val_str.unwrap().parse().unwrap()
+    pub fn get(&self, setting_key: SettingKey) -> Option<&String> {
+        self.config.user_data.get(&*setting_key.to_string())
     }
 
-    pub fn set(&mut self, setting_key: SettingKey, val: u32) {
+    pub fn set(&mut self, setting_key: SettingKey, val: String) {
         self.config.user_data.insert(setting_key.to_string(), val.to_string());
     }
 
-    pub fn save(mut self, window: &Window) {
-        if window.window_flags() as u32 & SDL_WindowFlags::SDL_WINDOW_MAXIMIZED as u32 <= 0 {
-            self.set(XPos, window.position().0 as u32);
-            self.set(YPos, window.position().1 as u32);
-            self.set(Width, window.size().0);
-            self.set(Height, window.size().1);
-        }
-        self.set(Flags, window.window_flags());
+    pub fn save(&mut self, state: &mut PixState) {
+        let (width, height) = state.canvas.window().size();
+        self.set(Width, width.to_string());
+        self.set(Height, height.to_string());
 
         self.config.save_config(&self.my_abserde).unwrap();
     }

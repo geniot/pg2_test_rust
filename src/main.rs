@@ -29,24 +29,22 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let icon_bytes = include_bytes!("res/pg2_test_rust.png");
     let font_bytes = include_bytes!("res/pixelberry.ttf");
+    let em_bytes = include_bytes!("res/emerald.png");
 
     let icon_rw_ops = sdl2::rwops::RWops::from_bytes(icon_bytes).unwrap();
     let font_rw_ops = sdl2::rwops::RWops::from_bytes(font_bytes).unwrap();
+    let em_rw_ops = sdl2::rwops::RWops::from_bytes(em_bytes).unwrap();
 
     let texture = sdl2::image::ImageRWops::load_png(&icon_rw_ops).unwrap();
     let mut font = ttf_context.load_font_from_rwops(font_rw_ops, 18)?;
-    // font.set_style(sdl2::ttf::FontStyle::BOLD);
-
-    let em_bytes = include_bytes!("res/emerald.png");
-    let em_rw_ops = sdl2::rwops::RWops::from_bytes(em_bytes).unwrap();
     let surface = sdl2::image::ImageRWops::load_png(&em_rw_ops).unwrap();
-
+    // font.set_style(sdl2::ttf::FontStyle::BOLD);
 
     let mut fps_counter = FpsCounter::new(timer_subsystem.ticks());
 
     let mut rng = rand::thread_rng();
 
-    let em_size = 200;
+    let em_size = 50;
     let mut em_vec: Vec<Emerald> = Vec::with_capacity(em_size);
     for _ in 0..em_size {
         em_vec.push(Emerald::new());
